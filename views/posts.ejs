@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Posts</title>
+</head>
+
+<body>
+  <a href="/">홈으로</a>
+  <h1>포스트 목록</h1>
+
+  <h2>총 포스트 수 <%= postContents %></h2>
+  <ul>
+    <% if (postContents > 0) { %>
+    <% for (let i = 0; i < postContents; i++){ %>
+    <li>
+      TITLE: <%=POSTS[i].title%>
+    </li>
+    <li>
+      CONTENT: <%=POSTS[i].content%>
+    </li>
+    <a href="#" onclick="deletePost('<%=POSTS[i].title%>');">포스트 삭제</a>
+    <% } %>
+    <% } else { %>
+    <li>포스트가 없습니다</li>
+    <% } %>
+  </ul>
+
+  <form action="/posts" method="POST">
+    <div>
+      <label>Title</label>
+      <input type="text" name="title" />
+    </div>
+    <div>
+      <label>Content</label>
+      <input type="text" name="content" />
+    </div>
+    <button type="submit">추가</button>
+  </form>
+</body>
+<script>
+  async function deletePost(posts) {
+    const res = await fetch(`http://localhost:4000/posts/${posts}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    if (res.status === 200) {
+      location.reload()
+    } else {
+      console.log('통신이상')
+    }
+  }
+</script>
+
+</html>
